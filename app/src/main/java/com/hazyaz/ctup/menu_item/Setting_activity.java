@@ -1,10 +1,12 @@
 package com.hazyaz.ctup.menu_item;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,9 +32,12 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class Setting_activity extends AppCompatActivity {
 
@@ -72,7 +77,11 @@ public class Setting_activity extends AppCompatActivity {
 
                 mDisplayName.setText(name);
                 mStatus.setText(status);
-                Picasso.get().load(imageM).into(mImageView);
+                if(!imageM.equals("default")){
+
+                    Picasso.get().load(imageM).placeholder(R.drawable.ic_launcher_background).into(mImageView);
+
+                }
             }
 
             @Override
@@ -81,67 +90,106 @@ public class Setting_activity extends AppCompatActivity {
             }
         });
 
-
+//this intent starts image chooser from the gallery
         mChangeImage = (Button) findViewById(R.id.Image_button);
         mChangeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent galleryIntent = new Intent();
                 galleryIntent.setType("image/*");
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-
                 startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PCIK);
-
-
             }
         });
     }
 
+
+    //after selecting the image from the gallert the data is sent to te result method
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_PCIK && resultCode == RESULT_OK) {
+            //if the request code is ok then we take the data uri of the image
             Uri imageUri = data.getData();
-
+            //cropping the image taken from gallery to 1:1 ratio
             CropImage.activity(imageUri)
                     .setAspectRatio(1, 1)
                     .start(this);
         }
+//if the crop is done carefully then it is send below
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
+//taking the cropped image uri into result uri
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode == RESULT_OK) {
+
                 String currentUserId = mCurrentUser.getUid();
+
                 Uri resultUri = result.getUri();
+
+                File thumbFilePath = new File(resultUri.getPath());
+
+                Bitmap thumb_bitmap = new Compressor(this)
+                        .setMaxHeight(200)
+                        .setMaxWidth(200)
+                        .setQuality(75)
+                        .compressToBitmap(thumbFilePath);
+
+                ByteArrayOutputStream baos =  new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                final byte [] thumb_byte = baos.toByteArray();
+// getting the file path of the storage in firebase storage into to file path
                 final StorageReference filePath = mStorageRef.child("profile_image").child( currentUserId+ ".jpg");
 
+                final StorageReference thumbFile = mStorageRef.child("profile_image").child("thumbnails")
+                        .child(currentUserId+".jpg");
 
-
-                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                //after getting the location of firebase storage we put the image into that which is stored in
+                //result uri which i got from crop activity
+                //if the saving task is successfull we get the download url
+                filePath.putFile(resultUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
-                    public void onComplete(@NonNull final Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()){
+                            throw task.getException();
+                        }
+                        return filePath.getDownloadUrl();
+                        //getting the downlaod url
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull final Task<Uri> task) {
+                        if (task.isSuccessful()){
 
-                            String  downloadUrl =
-                                    //image4 not dwonoliafing properly
+                            Uri downUri = task.getResult();
+                           final String download = downUri.toString();
 
-
-                            mUserDatabase.child("image").setValue(downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            UploadTask uploadTask = thumbFile.putBytes(thumb_byte);
+                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(getApplicationContext(), "picupdates in datavbase", Toast.LENGTH_SHORT).show();
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> ThumbTask) {
+
+                                    if(ThumbTask.isSuccessful())
+                                    {
+                                        mUserDatabase.child("image").setValue(download).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(getApplicationContext(), "picupdates in datavbase", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
+
 
                                 }
                             });
 
 
-                        }
 
+                            Log.d("tag", "onComplete: Url: "+ downUri.toString());
+                        }
                     }
                 });
 
@@ -153,21 +201,6 @@ public class Setting_activity extends AppCompatActivity {
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

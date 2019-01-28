@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hazyaz.ctup.login.StartingActivity;
+import com.hazyaz.ctup.menu_item.AllUsersActivity;
 import com.hazyaz.ctup.menu_item.Setting_activity;
 
 
@@ -88,6 +89,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.status_setting:
            Intent SettingIntent = new Intent(MainActivity.this, Setting_activity.class);
             startActivity(SettingIntent);
+
+
+            case R.id.all_users:
+                Intent allUsersIntent = new Intent(MainActivity.this, AllUsersActivity.class);
+                startActivity(allUsersIntent);
+
 
 
            default:
