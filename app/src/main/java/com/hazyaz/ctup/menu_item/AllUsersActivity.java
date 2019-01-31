@@ -1,6 +1,7 @@
 
 package com.hazyaz.ctup.menu_item;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,7 +48,7 @@ public class AllUsersActivity extends AppCompatActivity {
                     protected void populateViewHolder(UsersViewHolder viewHolder, users model, int position) {
 
                         viewHolder.setName(model.getName());
-                        viewHolder.setImage(model.getImage());
+                        viewHolder.setImage(model.getThumbImage());
                         viewHolder.setUserStatus(model.getStatus());
 
                     }
@@ -74,7 +75,7 @@ public class AllUsersActivity extends AppCompatActivity {
 
         public void setImage(String image) {
             CircleImageView mImageView = mView.findViewById(R.id.cirlce_user_all);
-            Picasso.get().load(image).placeholder(R.drawable.ic_launcher_foreground).into(mImageView);
+            Picasso.get().load(image).into(mImageView);
 
         }
 

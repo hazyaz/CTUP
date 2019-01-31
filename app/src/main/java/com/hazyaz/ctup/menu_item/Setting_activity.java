@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +36,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
@@ -50,7 +53,7 @@ public class Setting_activity extends AppCompatActivity {
     private TextView mDisplayName;
     private TextView mStatus;
     private Button mChangeImage;
-
+    private static String imageDownload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +76,12 @@ public class Setting_activity extends AppCompatActivity {
                 String name = dataSnapshot.child("name").getValue().toString();
                 String imageM = dataSnapshot.child("image").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
-                String thumbnaill_img = dataSnapshot.child("thumb_image").getValue().toString();
+         //       String thumbnaill_img = dataSnapshot.child("thumb_image").getValue().toString();
+
 
                 mDisplayName.setText(name);
                 mStatus.setText(status);
-                if(!imageM.equals("default")){
+                if (!imageM.equals("default")) {
 
                     Picasso.get().load(imageM).placeholder(R.drawable.ic_launcher_background).into(mImageView);
 
@@ -136,22 +140,21 @@ public class Setting_activity extends AppCompatActivity {
                         .setQuality(75)
                         .compressToBitmap(thumbFilePath);
 
-                ByteArrayOutputStream baos =  new ByteArrayOutputStream();
-                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
-                final byte [] thumb_byte = baos.toByteArray();
-// getting the file path of the storage in firebase storage into to file path
-                final StorageReference filePath = mStorageRef.child("profile_image").child( currentUserId+ ".jpg");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] thumb_byte = baos.toByteArray();
+                // getting the file path of the storage in firebase storage into to file path
+                final StorageReference filePath = mStorageRef.child("profile_image").child(currentUserId + ".jpg");
 
-                final StorageReference thumbFile = mStorageRef.child("profile_image").child("thumbnails")
-                        .child(currentUserId+".jpg");
+                final StorageReference thumbFile1 = mStorageRef.child("profile_image").child("thumbnails").child(currentUserId + ".jpg");
 
-                //after getting the location of firebase storage we put the image into that which is stored in
-                //result uri which i got from crop activity
-                //if the saving task is successfull we get the download url
+
+
+
                 filePath.putFile(resultUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if (!task.isSuccessful()){
+                        if (!task.isSuccessful()) {
                             throw task.getException();
                         }
                         return filePath.getDownloadUrl();
@@ -160,39 +163,73 @@ public class Setting_activity extends AppCompatActivity {
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull final Task<Uri> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
 
                             Uri downUri = task.getResult();
-                           final String download = downUri.toString();
+                            imageDownload = downUri.toString();
 
-                            UploadTask uploadTask = thumbFile.putBytes(thumb_byte);
-                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+                        final   UploadTask uploadTask =thumbFile1.putBytes(thumb_byte);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> ThumbTask) {
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Handle unsuccessful uploads
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                    if(ThumbTask.isSuccessful())
-                                    {
-                                        mUserDatabase.child("image").setValue(download).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(getApplicationContext(), "picupdates in datavbase", Toast.LENGTH_SHORT).show();
-                                                }
+                                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                        @Override
+                                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                            if (!task.isSuccessful()) {
+                                                throw task.getException();
                                             }
-                                        });
-                                    }
 
+                                            // Continue with the task to get the download URL
+                                            return thumbFile1.getDownloadUrl();
+                                        }
+                                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Uri> task) {
+                                            if (task.isSuccessful()) {
+                                                Uri downloadUri = task.getResult();
+                                                String ThumbUrl = downloadUri.toString();
+
+                                                Map ImgData = new HashMap();
+                                                ImgData.put("image",imageDownload);
+                                                ImgData.put("thumb_image",ThumbUrl);
+
+                                                mUserDatabase.updateChildren(ImgData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        if ( aVoid!= null) {
+                                                            Toast.makeText(getApplicationContext(), "picupdates in datavbase", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(getApplicationContext(), "Error in thumbnail", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+
+
+
+
+
+                                            } else {
+
+
+                                            }
+                                        }
+                                    });
 
                                 }
                             });
 
 
 
-                            Log.d("tag", "onComplete: Url: "+ downUri.toString());
                         }
                     }
                 });
-
 
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -200,7 +237,12 @@ public class Setting_activity extends AppCompatActivity {
             }
         }
 
+Button button = (Button)findViewById(R.id.testButt);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
-
-
 }
