@@ -24,18 +24,27 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if(position == 1 ) {
-            Request_fragment request_fragment = new Request_fragment();
-            return request_fragment;
-        }
 
-           else if(position == 2) {
+
+        switch (position) {
+
+            case 0:
+                Request_fragment request_fragment = new Request_fragment();
+                return request_fragment;
+
+            case 1:
                 Chat_fragment chat_fragment = new Chat_fragment();
                 return chat_fragment;
-            }
 
-            Friends_fragment friends_fragment = new Friends_fragment();
-            return friends_fragment;
+
+            case 2:
+                Friends_fragment friends_fragment = new Friends_fragment();
+                return friends_fragment;
+
+                default:
+                    return null;
+
+        }
 
     }
 

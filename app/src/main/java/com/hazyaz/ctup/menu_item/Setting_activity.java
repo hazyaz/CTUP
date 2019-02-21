@@ -29,6 +29,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hazyaz.ctup.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -53,6 +55,7 @@ public class Setting_activity extends AppCompatActivity {
     private TextView mDisplayName;
     private TextView mStatus;
     private Button mChangeImage;
+    private String imageM;
     private static String imageDownload;
 
     @Override
@@ -68,22 +71,38 @@ public class Setting_activity extends AppCompatActivity {
 
         final String mCurrentUserUid = mCurrentUser.getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(mCurrentUserUid);
+        mUserDatabase.keepSynced(true);
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 String name = dataSnapshot.child("name").getValue().toString();
-                String imageM = dataSnapshot.child("image").getValue().toString();
+               imageM = dataSnapshot.child("image").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
-         //       String thumbnaill_img = dataSnapshot.child("thumb_image").getValue().toString();
+                //       String thumbnaill_img = dataSnapshot.child("thumb_image").getValue().toString();
 
 
                 mDisplayName.setText(name);
                 mStatus.setText(status);
+
+                //only try to ask for url if the url is not default
                 if (!imageM.equals("default")) {
 
-                    Picasso.get().load(imageM).placeholder(R.drawable.ic_launcher_background).into(mImageView);
+                    Picasso.get().load(imageM).networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(mImageView, new Callback() {
+                                @Override
+                                public void onSuccess() {
+
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Picasso.get().load(imageM).placeholder(R.drawable.ic_launcher_background).into(mImageView);
+                                }
+                            });
+
+
 
                 }
             }
@@ -149,8 +168,6 @@ public class Setting_activity extends AppCompatActivity {
                 final StorageReference thumbFile1 = mStorageRef.child("profile_image").child("thumbnails").child(currentUserId + ".jpg");
 
 
-
-
                 filePath.putFile(resultUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
                     public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -169,7 +186,7 @@ public class Setting_activity extends AppCompatActivity {
                             imageDownload = downUri.toString();
 
 
-                        final   UploadTask uploadTask =thumbFile1.putBytes(thumb_byte);
+                            final UploadTask uploadTask = thumbFile1.putBytes(thumb_byte);
                             uploadTask.addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception exception) {
@@ -197,22 +214,19 @@ public class Setting_activity extends AppCompatActivity {
                                                 String ThumbUrl = downloadUri.toString();
 
                                                 Map ImgData = new HashMap();
-                                                ImgData.put("image",imageDownload);
-                                                ImgData.put("thumb_image",ThumbUrl);
+                                                ImgData.put("image", imageDownload);
+                                                ImgData.put("thumb_image", ThumbUrl);
 
                                                 mUserDatabase.updateChildren(ImgData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        if ( aVoid!= null) {
+                                                        if (aVoid != null) {
                                                             Toast.makeText(getApplicationContext(), "picupdates in datavbase", Toast.LENGTH_SHORT).show();
                                                         } else {
                                                             Toast.makeText(getApplicationContext(), "Error in thumbnail", Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
                                                 });
-
-
-
 
 
                                             } else {
@@ -226,7 +240,6 @@ public class Setting_activity extends AppCompatActivity {
                             });
 
 
-
                         }
                     }
                 });
@@ -237,12 +250,6 @@ public class Setting_activity extends AppCompatActivity {
             }
         }
 
-Button button = (Button)findViewById(R.id.testButt);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
     }
 }

@@ -1,13 +1,12 @@
 
 package com.hazyaz.ctup.menu_item;
 
-import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -50,6 +49,18 @@ public class AllUsersActivity extends AppCompatActivity {
                         viewHolder.setName(model.getName());
                         viewHolder.setImage(model.getThumbImage());
                         viewHolder.setUserStatus(model.getStatus());
+
+                        final String user_id = getRef(position).getKey();
+
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(AllUsersActivity.this,UserProfileAcitivity.class);
+                                intent.putExtra("user_id",user_id);
+                                startActivity(intent);
+                            }
+                        });
+
 
                     }
                 };
