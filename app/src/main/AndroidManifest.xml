@@ -23,14 +23,25 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.StartingActivity" />
-        <activity android:name=".login.RegisterActivity" />
-        <activity android:name=".login.ExistingUserLogin" />
+        <activity android:name=".login.RegisterActivity"
+            android:parentActivityName=".login.StartingActivity" />
+
+
+        <activity android:name=".login.ExistingUserLogin"
+            android:parentActivityName=".login.StartingActivity"
+            />
+
         <activity android:name=".menu_item.Setting_activity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+
+
         <activity android:name=".menu_item.AllUsersActivity" />
         <activity android:name=".menu_item.UserProfileAcitivity" />
+
+
+
 
         <service android:name=".FirebaseMessagingService">
             <intent-filter>

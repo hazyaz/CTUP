@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -12,6 +13,10 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.hazyaz.ctup.adapters.CustomPagerAdapter;
 import com.hazyaz.ctup.login.StartingActivity;
 import com.hazyaz.ctup.menu_item.AllUsersActivity;
 import com.hazyaz.ctup.menu_item.Setting_activity;
@@ -24,26 +29,38 @@ public class MainActivity extends AppCompatActivity {
     int RC_SIGN_IN = 0;
     //Fire base variable declaration
     private FirebaseAuth mAuth;
-
+    private Toolbar mToolbar;
+    private DatabaseReference mUserRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
+        mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("CTUP");
+
+        if (mAuth.getCurrentUser() != null) {
 
 
-       mViewPager = (ViewPager) findViewById(R.id.view_pager_main);
-       mCustomPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
+            mUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+
+        }
+
+
+        mViewPager = (ViewPager) findViewById(R.id.view_pager_main);
+        mCustomPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mCustomPagerAdapter);
 
 
-        mTabLayout  = (TabLayout)findViewById(R.id.tab_bar_main);
-       mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_bar_main);
+        mTabLayout.setupWithViewPager(mViewPager);
 
 
         // Fire base Class initialising of obejct
-        mAuth = FirebaseAuth.getInstance();
+
 
     }
 
@@ -55,16 +72,24 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
 // if user is not signed in send it to login screen
-        Intent mStartIntent = new Intent(MainActivity.this, StartingActivity.class);
-        startActivity(mStartIntent);
-        finish();
+            Intent mStartIntent = new Intent(MainActivity.this, StartingActivity.class);
+            startActivity(mStartIntent);
+            finish();
         } else {
-
-      Toast.makeText(this,"Signed in Successfully",Toast.LENGTH_LONG).show();
+            mUserRef.child("online").setValue("true");
         }
 
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mUserRef.child("online").setValue("false");
+        mUserRef.child("last_seen").setValue(ServerValue.TIMESTAMP);
+
+
+    }
 
     // menu item for signout procress
     @Override
@@ -73,22 +98,21 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+
     // menu item for signout procress
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-       switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.log_out_from_main:
-         FirebaseAuth.getInstance().signOut();
-         sendToStart();
-           return true;
-
+                FirebaseAuth.getInstance().signOut();
+                sendToStart();
+                return true;
 
 
             case R.id.status_setting:
-           Intent SettingIntent = new Intent(MainActivity.this, Setting_activity.class);
-            startActivity(SettingIntent);
+                Intent SettingIntent = new Intent(MainActivity.this, Setting_activity.class);
+                startActivity(SettingIntent);
 
 
             case R.id.all_users:
@@ -96,20 +120,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(allUsersIntent);
 
 
-
-           default:
-               return  super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
     // menu item for signout procress
 
 
-void sendToStart()
-{
-    Intent intent = new Intent(MainActivity.this,StartingActivity.class);
-    startActivity(intent);
-    finish();
-}
+    void sendToStart() {
+        Intent intent = new Intent(MainActivity.this, StartingActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
 }

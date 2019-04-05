@@ -7,25 +7,35 @@
     tools:context=".login.StartingActivity">
 
 
+
+
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/wel"/>
+
+
 <Button
-    android:layout_width="wrap_content"
+    android:layout_marginBottom="20dp"
+    android:layout_width="150dp"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
-    android:text="NEED AN ACCOUNt"
+    android:text="SIGN UP"
+    android:layout_above="@+id/Signin"
     android:id="@+id/Signin_Starting"
     />
 
 
-
-
-
-
     <Button
-        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-android:layout_alignParentBottom="true"
-        android:text="have acc"
-        android:id="@+id/Signin_"
+        android:layout_alignParentBottom="true"
+        android:text="SIGN IN"
+        android:id="@+id/Signin"
+        android:layout_marginBottom="80dp"
         />
 
 

@@ -25,7 +25,7 @@ public class StartingActivity extends Activity {
             }
         });
 
-        Button button1 = (Button)findViewById(R.id.Signin_);
+        Button button1 = (Button)findViewById(R.id.Signin );
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -6,9 +6,10 @@
     tools:context=".login.ExistingUserLogin">
 
 
-
+<include layout="@layout/app_bar_layout" android:id="@+id/app_bar_login"/>
 
     <android.support.design.widget.TextInputLayout
+        android:paddingTop="150dp"
         android:id="@+id/ExisEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,9 +17,9 @@
         android:layout_marginTop="50dp">
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="asdasddasddasdasd"
+            android:hint="Email Address"
             android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
@@ -28,23 +29,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ExisEmail"
-        android:layout_marginTop="116dp">
+        android:layout_marginTop="40dp">
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="asdasdooooooooooooooooo"
+            android:hint="Password"
             android:inputType="textPassword" />
 
     </android.support.design.widget.TextInputLayout>
 
 
     <Button
+        android:layout_marginBottom="100dp"
         android:id="@+id/ExinstingUserLogin"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:text="Enter" />
+        android:text="SIGN IN " />
 
 </RelativeLayout>

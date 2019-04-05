@@ -33,7 +33,14 @@
         android:layout_height="wrap_content"
         android:text="hey how are you doing man"/>
 
-
+<ImageView
+    android:id="@+id/OnlineDot"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="30dp"
+    android:layout_width="10dp"
+    android:layout_height="10dp"
+    android:layout_toRightOf="@+id/user_name"
+    />
 
 
 

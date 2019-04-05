@@ -1,4 +1,4 @@
-package com.hazyaz.ctup;
+package com.hazyaz.ctup.adapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
