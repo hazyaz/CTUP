@@ -23,8 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hazyaz.ctup.R;
-import com.hazyaz.ctup.utils.Friends;
 import com.hazyaz.ctup.menu_item.UserProfileAcitivity;
+import com.hazyaz.ctup.utils.Friends;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,7 +50,7 @@ public class Friends_fragment extends Fragment {
 
         mMainView = inflater.inflate(R.layout.fragment_friends, container, false);
 
-        mFriendsList = (RecyclerView) mMainView.findViewById(R.id.friendsRecyclerView);
+        mFriendsList = mMainView.findViewById(R.id.friendsRecyclerView);
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
@@ -179,28 +179,28 @@ public class Friends_fragment extends Fragment {
 
         public void setDate(String date) {
 
-            TextView userStatusView = (TextView) mView.findViewById(R.id.user_status);
+            TextView userStatusView = mView.findViewById(R.id.user_status);
             userStatusView.setText(date);
 
         }
 
         public void setName(String name) {
 
-            TextView userNameView = (TextView) mView.findViewById(R.id.user_name);
+            TextView userNameView = mView.findViewById(R.id.user_name);
             userNameView.setText(name);
 
         }
 
         public void setUserImage(String thumb_image, Context ctx) {
 
-            CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.cirlce_user_all);
+            CircleImageView userImageView = mView.findViewById(R.id.cirlce_user_all);
             Picasso.get().load(thumb_image).into(userImageView);
 
         }
 
         public void setUserOnline(String online_status) {
 
-           ImageView userOnlineView = (ImageView) mView.findViewById(R.id.OnlineDot);
+            ImageView userOnlineView = mView.findViewById(R.id.OnlineDot);
 
             if(online_status.equals("true")){
 

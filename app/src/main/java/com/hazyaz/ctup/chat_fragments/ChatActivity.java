@@ -3,12 +3,11 @@ package com.hazyaz.ctup.chat_fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -34,15 +33,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.hazyaz.ctup.utils.GetTimeAgo;
-import com.hazyaz.ctup.utils.Message;
 import com.hazyaz.ctup.R;
 import com.hazyaz.ctup.adapters.MessageAdapter;
+import com.hazyaz.ctup.utils.Message;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,8 +92,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
 
-
-        mChatToolbar = (Toolbar) findViewById(R.id.chat_app_bar);
+        mChatToolbar = findViewById(R.id.chat_app_bar);
         setSupportActionBar(mChatToolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -120,18 +114,18 @@ public class ChatActivity extends AppCompatActivity {
 
         // ---- Custom Action bar Items ----
 
-        mTitleView = (TextView) findViewById(R.id.textViewtitle);
-        mLastSeenView = (TextView) findViewById(R.id.textView2);
-        mProfileImage = (CircleImageView) findViewById(R.id.customCirclulsrvire);
+        mTitleView = findViewById(R.id.textViewtitle);
+        mLastSeenView = findViewById(R.id.textView2);
+        mProfileImage = findViewById(R.id.customCirclulsrvire);
 
-        mChatAddBtn = (ImageButton) findViewById(R.id.chat_add_btn);
-        mChatSendBtn = (ImageButton) findViewById(R.id.chat_send_btn);
-        mChatMessageView = (EditText) findViewById(R.id.chat_message_view);
+        mChatAddBtn = findViewById(R.id.chat_add_btn);
+        mChatSendBtn = findViewById(R.id.chat_send_btn);
+        mChatMessageView = findViewById(R.id.chat_message_view);
 
-        mAdapter = new MessageAdapter(messagesList);
+        mAdapter = new MessageAdapter(messagesList, mChatUser);
 
-        mMessagesList = (RecyclerView) findViewById(R.id.messages_list);
-        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.message_swipe_layout);
+        mMessagesList = findViewById(R.id.messages_list);
+        mRefreshLayout = findViewById(R.id.message_swipe_layout);
         mLinearLayout = new LinearLayoutManager(this);
 
         mMessagesList.setHasFixedSize(true);
@@ -162,13 +156,13 @@ public class ChatActivity extends AppCompatActivity {
 
                 } else {
 
-                    GetTimeAgo getTimeAgo = new GetTimeAgo();
+                    //    GetTimeAgo getTimeAgo = new GetTimeAgo();
 
-                    long lastTime = Long.parseLong(online);
+                    //   long lastTime = Long.parseLong(online);
 
-                    String lastSeenTime = getTimeAgo.getTimeAgo(lastTime, getApplicationContext());
+                    //   String lastSeenTime = getTimeAgo.getTimeAgo(lastTime, getApplicationContext());
 
-                    mLastSeenView.setText(lastSeenTime);
+                    //   mLastSeenView.setText(lastSeenTime);
 
                 }
 

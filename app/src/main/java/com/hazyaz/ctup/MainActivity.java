@@ -1,21 +1,18 @@
 package com.hazyaz.ctup;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.hazyaz.ctup.adapters.CustomPagerAdapter;
 import com.hazyaz.ctup.login.StartingActivity;
 import com.hazyaz.ctup.menu_item.AllUsersActivity;
@@ -38,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-        mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
+        mToolbar = findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("CTUP");
 
@@ -50,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        mViewPager = (ViewPager) findViewById(R.id.view_pager_main);
+        mViewPager = findViewById(R.id.view_pager_main);
         mCustomPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mCustomPagerAdapter);
 
 
-        mTabLayout = (TabLayout) findViewById(R.id.tab_bar_main);
+        mTabLayout = findViewById(R.id.tab_bar_main);
         mTabLayout.setupWithViewPager(mViewPager);
 
 
@@ -85,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mUserRef.child("online").setValue("false");
-        mUserRef.child("last_seen").setValue(ServerValue.TIMESTAMP);
+        // mUserRef.child("online").setValue("false");
+        //   mUserRef.child("last_seen").setValue(ServerValue.TIMESTAMP);
 
 
     }
