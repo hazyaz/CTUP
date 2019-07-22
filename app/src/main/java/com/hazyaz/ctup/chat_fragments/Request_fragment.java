@@ -3,6 +3,8 @@ package com.hazyaz.ctup.chat_fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,19 +28,21 @@ import com.hazyaz.ctup.R;
 import com.hazyaz.ctup.utils.Friends;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 
 public class Request_fragment extends Fragment {
 
     public View mRequestView;
     private FirebaseAuth mAuth;
     private DatabaseReference mRequestDatabase;
+
     private String mCurrentUser;
-    private Button mAcceptRequest;
-    private Button mRejectRequest;
     private DatabaseReference mFriendsDatabase;
     private DatabaseReference mUserReqDatabase;
-    private RecyclerView mRecyclerView;
 
+    private RecyclerView mRecyclerView;
     public Request_fragment() {
         // Required empty public constructor
     }
@@ -54,12 +60,10 @@ public class Request_fragment extends Fragment {
 
         mCurrentUser = mAuth.getCurrentUser().getUid();
 
-        mAcceptRequest = mRequestView.findViewById(R.id.AcceptRequest);
-        mRejectRequest = mRequestView.findViewById(R.id.RejectRequest);
 
 
         mRequestDatabase = FirebaseDatabase.getInstance().getReference().child("friendsReq").child(mCurrentUser);
-        mRequestDatabase.keepSynced(true);
+
 
         mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrentUser);
         mFriendsDatabase.keepSynced(true);
@@ -72,10 +76,10 @@ public class Request_fragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
         return mRequestView;
 
     }
+
 
     @Override
     public void onStart() {
@@ -99,47 +103,70 @@ public class Request_fragment extends Fragment {
 
                         mUserReqDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
+                            public void onDataChange(final DataSnapshot dataSnapshot) {
 
                                 final String userName = dataSnapshot.child("name").getValue().toString();
                                 String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
 
                                 friendsViewHolder.setName(userName);
                                 friendsViewHolder.setUserImage(userThumb, getContext());
-
-
-                                mAcceptRequest.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-
-
-                                    }
-                                });
+                                Button mAcceptRequest = mRequestView.findViewById(R.id.AcceptRequest);
+                                Button mRejectRequest = mRequestView.findViewById(R.id.RejectRequest);
 
 
                                 mRejectRequest.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        mRequestDatabase.child(list_user_id).removeValue(new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                                Toast.makeText(getContext(), "Request Removed", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                });
+
+
+                                mAcceptRequest.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
+                                        mRequestDatabase.child(list_user_id).removeValue(new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                                            }
+                                        });
+                                        mFriendsDatabase.child(list_user_id).child("date").setValue(currentDate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getContext(), "friedns added", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
 
 
                                     }
                                 });
 
-
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
                         });
 
-                    }
-                };
 
+                    }
+
+
+
+                };
         mRecyclerView.setAdapter(friendsRecyclerViewAdapter);
 
+
     }
+
 
     public static class FriendsViewHolder extends RecyclerView.ViewHolder {
 

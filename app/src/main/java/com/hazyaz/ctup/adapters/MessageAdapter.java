@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,15 +60,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         String dateString = formatter.format(new Date(c.getTime()));
 
 
-        if (c.getFrom().equals(secUser)) {
-
-            viewHolder.messageText2.setText(c.getMessage());
-            viewHolder.timeText.setText(dateString);
-
-        } else {
+        if (c.getFrom().equals(secUser) && c.getMessage() != null) {
 
             viewHolder.messageText.setText(c.getMessage());
             viewHolder.timeText.setText(dateString);
+
+        } else if (c.getMessage() != null) {
+
+            viewHolder.messageText1.setText(c.getMessage());
+            viewHolder.timeText1.setText(dateString);
         }
 
 
@@ -77,15 +78,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         public TextView messageText;
         public TextView timeText;
-        public TextView messageText2;
+        public TextView messageText1;
+        public TextView timeText1;
+        public ImageView imageView1;
 
 
         public MessageViewHolder(View view) {
             super(view);
 
 
+            messageText1 = view.findViewById(R.id.message_receiver);
+            timeText1 = view.findViewById(R.id.time_receiver);
             messageText = view.findViewById(R.id.message_sender);
             timeText = view.findViewById(R.id.time_sender);
+            imageView1 = view.findViewById(R.id.message_image_layout);
 
 
         }
