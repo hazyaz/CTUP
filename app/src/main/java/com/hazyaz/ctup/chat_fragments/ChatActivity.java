@@ -195,7 +195,7 @@ public class ChatActivity extends AppCompatActivity {
 
                             if(databaseError != null){
 
-                                Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                                Log.d("CHAT_LOG", databaseError.getMessage());
 
                             }
 
@@ -245,7 +245,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onRefresh() {
 
                 mCurrentPage++;
-
+///dfgdfgdfgdf
                 itemPos = 0;
 
                 loadMoreMessages();
@@ -305,7 +305,7 @@ public class ChatActivity extends AppCompatActivity {
 
                                 if(databaseError != null){
 
-                                    Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                                    Log.d("CHAT_LOG", databaseError.getMessage());
 
                                 }
 
@@ -488,7 +488,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     if(databaseError != null){
 
-                        Log.d("CHAT_LOG", databaseError.getMessage().toString());
+                        Log.d("CHAT_LOG", databaseError.getMessage());
 
                     }
 
