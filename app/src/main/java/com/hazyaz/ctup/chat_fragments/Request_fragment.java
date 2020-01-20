@@ -1,13 +1,13 @@
 package com.hazyaz.ctup.chat_fragments;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,14 +35,15 @@ import java.util.Date;
 public class Request_fragment extends Fragment {
 
     public View mRequestView;
+    String mStatus;
     private FirebaseAuth mAuth;
     private DatabaseReference mRequestDatabase;
-
     private String mCurrentUser;
     private DatabaseReference mFriendsDatabase;
     private DatabaseReference mUserReqDatabase;
-
     private RecyclerView mRecyclerView;
+
+
     public Request_fragment() {
         // Required empty public constructor
     }
@@ -59,7 +60,6 @@ public class Request_fragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         mCurrentUser = mAuth.getCurrentUser().getUid();
-
 
 
         mRequestDatabase = FirebaseDatabase.getInstance().getReference().child("friendsReq").child(mCurrentUser);
@@ -101,52 +101,106 @@ public class Request_fragment extends Fragment {
 
                         final String list_user_id = getRef(i).getKey();
 
-                        mUserReqDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
+
+                        mRequestDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onDataChange(final DataSnapshot dataSnapshot) {
-
-                                final String userName = dataSnapshot.child("name").getValue().toString();
-                                String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
-
-                                friendsViewHolder.setName(userName);
-                                friendsViewHolder.setUserImage(userThumb, getContext());
-                                Button mAcceptRequest = mRequestView.findViewById(R.id.AcceptRequest);
-                                Button mRejectRequest = mRequestView.findViewById(R.id.RejectRequest);
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
 
-                                mRejectRequest.setOnClickListener(new View.OnClickListener() {
+                                if (dataSnapshot.child("request_type").exists()) {
+                                    mStatus = dataSnapshot.child("request_type").getValue().toString();
+                                }
+
+                                mUserReqDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
                                     @Override
-                                    public void onClick(View v) {
-                                        mRequestDatabase.child(list_user_id).removeValue(new DatabaseReference.CompletionListener() {
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                                Toast.makeText(getContext(), "Request Removed", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
+                                    public void onDataChange(final DataSnapshot dataSnapshot) {
+
+                                        if (mStatus.equals("received")) {
+
+                                            final String userName = dataSnapshot.child("name").getValue().toString();
+                                            String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
+
+
+                                            Log.d("eee", "erroeherein friend req ");
+                                            friendsViewHolder.userNameView.setText(userName);
+                                            Picasso.get().load(userThumb).into(friendsViewHolder.userImageView);
+
+
+                                            friendsViewHolder.mRejectRequest.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    mRequestDatabase.child(list_user_id).removeValue(new DatabaseReference.CompletionListener() {
+                                                        @Override
+                                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                                            Toast.makeText(getContext(), "Request Removed", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+                                            });
+
+
+                                            friendsViewHolder.mAcceptRequest.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
+                                                    mRequestDatabase.child(list_user_id).removeValue(new DatabaseReference.CompletionListener() {
+                                                        @Override
+                                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                                                        }
+                                                    });
+                                                    mFriendsDatabase.child(list_user_id).child("date").setValue(currentDate).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Toast.makeText(getContext(), "friedns added", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
+
+                                                }
+                                            });
+
+
+                                        } else if (mStatus.equals("sent")) {
+
+                                            final String userName = dataSnapshot.child("name").getValue().toString();
+                                            String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
+
+
+                                            Log.d("eee", "erroeherein friend req ");
+                                            friendsViewHolder.userNameView.setText(userName);
+                                            Picasso.get().load(userThumb).into(friendsViewHolder.userImageView);
+
+                                            friendsViewHolder.mAcceptRequest.setVisibility(View.VISIBLE);
+                                            friendsViewHolder.mAcceptRequest.setText("Cancel friend Request");
+                                            friendsViewHolder.mAcceptRequest.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    mRequestDatabase.child(list_user_id).removeValue();
+//                                                    new DatabaseReference.CompletionListener() {
+//                                                        @Override
+//                                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                                                            Toast.makeText(getContext(), "Request Removed", Toast.LENGTH_SHORT).show();
+//                                                        }
+//                                                    });
+
+                                                }
+                                            });
+
+
+                                            friendsViewHolder.mRejectRequest.setVisibility(View.GONE);
+                                            friendsViewHolder.userStatusView.setText("You have send req to this");
+                                            Toast.makeText(getContext(), "Nofriedn bacche", Toast.LENGTH_LONG).show();
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                                     }
                                 });
 
-
-                                mAcceptRequest.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
-                                        mRequestDatabase.child(list_user_id).removeValue(new DatabaseReference.CompletionListener() {
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-
-                                            }
-                                        });
-                                        mFriendsDatabase.child(list_user_id).child("date").setValue(currentDate).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(getContext(), "friedns added", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-
-
-                                    }
-                                });
 
                             }
 
@@ -155,12 +209,7 @@ public class Request_fragment extends Fragment {
 
                             }
                         });
-
-
                     }
-
-
-
                 };
         mRecyclerView.setAdapter(friendsRecyclerViewAdapter);
 
@@ -171,33 +220,27 @@ public class Request_fragment extends Fragment {
     public static class FriendsViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
+        Button mAcceptRequest;
+        Button mRejectRequest;
+        TextView userNameView;
+        ImageView userImageView;
+        TextView userStatusView;
 
         public FriendsViewHolder(View itemView) {
             super(itemView);
 
             mView = itemView;
-
+            mAcceptRequest = itemView.findViewById(R.id.AcceptRequest);
+            mRejectRequest = itemView.findViewById(R.id.RejectRequest);
+            userNameView = mView.findViewById(R.id.requestUserName);
+            userImageView = mView.findViewById(R.id.userImageRequst);
+            userStatusView = mView.findViewById(R.id.simpleRequestText);
         }
 
 
-        public void setName(String name) {
-
-            TextView userNameView = mView.findViewById(R.id.requestUserName);
-            userNameView.setText(name);
-
-        }
-
-        public void setUserImage(String thumb_image, Context ctx) {
-
-            ImageView userImageView = mView.findViewById(R.id.userImageRequst);
-            Picasso.get().load(thumb_image).into(userImageView);
-
-        }
 
     }
 }
-
-
 
 
 
