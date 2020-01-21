@@ -62,13 +62,16 @@ public class Chat_fragment extends Fragment {
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
         mConvDatabase = FirebaseDatabase.getInstance().getReference().child("Chat").child(mCurrent_user_id);
-
         mConvDatabase.keepSynced(true);
+
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+
         mMessageDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(mCurrent_user_id);
         mUsersDatabase.keepSynced(true);
+
         Log.d("aaaaaaaaaasssas", mCurrent_user_id);
         Toast.makeText(getContext(), "this  is  cha  fragment  ", Toast.LENGTH_LONG).show();
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
