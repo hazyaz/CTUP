@@ -41,7 +41,9 @@ public class Request_fragment extends Fragment {
     private String mCurrentUser;
     private DatabaseReference mFriendsDatabase;
     private DatabaseReference mUserReqDatabase;
+    private DatabaseReference xFriendDatabase;
     private RecyclerView mRecyclerView;
+    private DatabaseReference xRequestDatbase;
 
 
     public Request_fragment() {
@@ -64,10 +66,14 @@ public class Request_fragment extends Fragment {
 
         mRequestDatabase = FirebaseDatabase.getInstance().getReference().child("friendsReq").child(mCurrentUser);
 
+        xRequestDatbase = FirebaseDatabase.getInstance().getReference().child("friendsReq");
+
 
         mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrentUser);
         mFriendsDatabase.keepSynced(true);
 
+
+        xFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
 
         mUserReqDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         mUserReqDatabase.keepSynced(true);
@@ -116,10 +122,15 @@ public class Request_fragment extends Fragment {
                                     public void onDataChange(final DataSnapshot dataSnapshot) {
 
                                         if (mStatus.equals("received")) {
+                                            String userName = "";
+                                            String userThumb = "";
 
-                                            final String userName = dataSnapshot.child("name").getValue().toString();
-                                            String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
-
+                                            if (dataSnapshot.child("name").exists()) {
+                                                userName = dataSnapshot.child("name").getValue().toString();
+                                            }
+                                            if (dataSnapshot.child("name").exists()) {
+                                                userThumb = dataSnapshot.child("thumb_image").getValue().toString();
+                                            }
 
                                             Log.d("eee", "erroeherein friend req ");
                                             friendsViewHolder.userNameView.setText(userName);
@@ -135,6 +146,7 @@ public class Request_fragment extends Fragment {
                                                             Toast.makeText(getContext(), "Request Removed", Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
+                                                    xRequestDatbase.child(list_user_id).child(mCurrentUser).removeValue();
                                                 }
                                             });
 
@@ -149,13 +161,14 @@ public class Request_fragment extends Fragment {
 
                                                         }
                                                     });
+                                                    xRequestDatbase.child(list_user_id).child(mCurrentUser).removeValue();
                                                     mFriendsDatabase.child(list_user_id).child("date").setValue(currentDate).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
                                                         public void onSuccess(Void aVoid) {
                                                             Toast.makeText(getContext(), "friedns added", Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
-
+                                                    xFriendDatabase.child(list_user_id).child(mCurrentUser).child("date").setValue(currentDate);
 
                                                 }
                                             });
@@ -177,6 +190,7 @@ public class Request_fragment extends Fragment {
                                                 @Override
                                                 public void onClick(View view) {
                                                     mRequestDatabase.child(list_user_id).removeValue();
+                                                    xRequestDatbase.child(list_user_id).child(mCurrentUser).removeValue();
 //                                                    new DatabaseReference.CompletionListener() {
 //                                                        @Override
 //                                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {

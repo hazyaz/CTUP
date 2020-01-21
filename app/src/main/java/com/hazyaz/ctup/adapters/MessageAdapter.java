@@ -2,6 +2,7 @@ package com.hazyaz.ctup.adapters;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,13 +60,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         String from_user = c.getFrom();
         String dateString = formatter.format(new Date(c.getTime()));
 
-
         if (c.getFrom().equals(secUser) && c.getMessage() != null) {
+            Log.d("uuuuuuuuuu", c.getMessage());
 
             viewHolder.messageText.setText(c.getMessage());
             viewHolder.timeText.setText(dateString);
 
+            viewHolder.messageText1.setText("");
+            viewHolder.timeText1.setText("");
+
         } else if (c.getMessage() != null) {
+            Log.d("uuuuuuuuuu", c.getMessage());
+
+            viewHolder.messageText.setText("");
+            viewHolder.timeText.setText("");
 
             viewHolder.messageText1.setText(c.getMessage());
             viewHolder.timeText1.setText(dateString);

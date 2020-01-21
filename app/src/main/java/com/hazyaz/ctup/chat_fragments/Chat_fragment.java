@@ -1,26 +1,20 @@
 package com.hazyaz.ctup.chat_fragments;
 
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,11 +25,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.hazyaz.ctup.R;
 import com.hazyaz.ctup.utils.Conv;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import com.hazyaz.ctup.R;
 
 
 public class Chat_fragment extends Fragment {
@@ -65,6 +59,7 @@ public static String currentTimeMessage;
 
         mMainView = inflater.inflate(R.layout.fragment_chat, container, false);
 
+
         mConvList = (RecyclerView) mMainView.findViewById(R.id.conv_list);
         mAuth = FirebaseAuth.getInstance();
 
@@ -76,7 +71,8 @@ public static String currentTimeMessage;
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         mMessageDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(mCurrent_user_id);
         mUsersDatabase.keepSynced(true);
-
+        Log.d("aaaaaaaaaasssas", mCurrent_user_id);
+        Toast.makeText(getContext(), "this  is  cha  fragment  ", Toast.LENGTH_LONG).show();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
@@ -107,6 +103,7 @@ public static String currentTimeMessage;
 
 
                 final String list_user_id = getRef(i).getKey();
+                Log.d("aaaaaaaaaasssas", list_user_id);
 
                 Query lastMessageQuery = mMessageDatabase.child(list_user_id).limitToLast(1);
 
