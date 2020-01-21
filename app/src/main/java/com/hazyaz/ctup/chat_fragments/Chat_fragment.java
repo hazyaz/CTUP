@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,18 +30,15 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
 public class Chat_fragment extends Fragment {
 
 
+    public static String currentTimeMessage;
     private RecyclerView mConvList;
-
     private DatabaseReference mConvDatabase;
     private DatabaseReference mMessageDatabase;
     private DatabaseReference mUsersDatabase;
-
     private FirebaseAuth mAuth;
-public static String currentTimeMessage;
     private String mCurrent_user_id;
 
     private View mMainView;
@@ -60,12 +56,12 @@ public static String currentTimeMessage;
         mMainView = inflater.inflate(R.layout.fragment_chat, container, false);
 
 
-        mConvList = (RecyclerView) mMainView.findViewById(R.id.conv_list);
+        mConvList = mMainView.findViewById(R.id.conv_list);
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
-        mConvDatabase = FirebaseDatabase.getInstance().getReference().child("chat").child(mCurrent_user_id);
+        mConvDatabase = FirebaseDatabase.getInstance().getReference().child("Chat").child(mCurrent_user_id);
 
         mConvDatabase.keepSynced(true);
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
@@ -91,6 +87,7 @@ public static String currentTimeMessage;
         super.onStart();
 
         Query conversationQuery = mConvDatabase.orderByChild("timestamp");
+        Log.d("aaaaaaaaaaaaaa", "" + conversationQuery);
 
         FirebaseRecyclerAdapter<Conv, ConvViewHolder> firebaseConvAdapter = new FirebaseRecyclerAdapter<Conv, ConvViewHolder>(
                 Conv.class,
@@ -104,6 +101,7 @@ public static String currentTimeMessage;
 
                 final String list_user_id = getRef(i).getKey();
                 Log.d("aaaaaaaaaasssas", list_user_id);
+                Log.d("aaaaaaaaaaaaaa", "" + list_user_id);
 
                 Query lastMessageQuery = mMessageDatabase.child(list_user_id).limitToLast(1);
 
@@ -144,13 +142,13 @@ public static String currentTimeMessage;
 
                         final String userName = dataSnapshot.child("name").getValue().toString();
                         String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
-
-                        if(dataSnapshot.hasChild("online")) {
-
-                            String userOnline = dataSnapshot.child("online").getValue().toString();
-                            convViewHolder.setUserOnline(userOnline);
-
-                        }
+//
+//                        if(dataSnapshot.hasChild("online")) {
+//
+//                            String userOnline = dataSnapshot.child("online").getValue().toString();
+//                            convViewHolder.setUserOnline(userOnline);
+//
+//                        }
 
                         convViewHolder.setName(userName);
                         convViewHolder.setUserImage(userThumb, getContext());
@@ -197,9 +195,10 @@ public static String currentTimeMessage;
 
         public void setMessage(String message, boolean isSeen){
 
-            TextView userStatusView = (TextView) mView.findViewById(R.id.user_status);
+            TextView userStatusView = mView.findViewById(R.id.user_status);
             userStatusView.setText(message);
 
+            Log.d("66666", "hsdfgsdfds");
             if(!isSeen){
                 userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.BOLD);
             } else {
@@ -210,33 +209,33 @@ public static String currentTimeMessage;
 
         public void setName(String name){
 
-            TextView userNameView = (TextView) mView.findViewById(R.id.user_name);
+            TextView userNameView = mView.findViewById(R.id.user_name);
             userNameView.setText(name);
 
         }
 
         public void setUserImage(String thumb_image, Context ctx){
 
-            CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.cirlce_user_all);
+            CircleImageView userImageView = mView.findViewById(R.id.cirlce_user_all);
             Picasso.get().load(thumb_image).into(userImageView);
 
         }
 
-        public void setUserOnline(String online_status) {
-
-            ImageView userOnlineView = (ImageView) mView.findViewById(R.id.OnlineDot);
-
-            if(online_status.equals("true")){
-
-                userOnlineView.setVisibility(View.VISIBLE);
-
-            } else {
-
-                userOnlineView.setVisibility(View.INVISIBLE);
-
-            }
-
-        }
+//        public void setUserOnline(String online_status) {
+//
+//            ImageView userOnlineView = (ImageView) mView.findViewById(R.id.OnlineDot);
+//
+//            if(online_status.equals("true")){
+//
+//                userOnlineView.setVisibility(View.VISIBLE);
+//
+//            } else {
+//
+//                userOnlineView.setVisibility(View.INVISIBLE);
+//
+//            }
+//
+//        }
 
 
     }
