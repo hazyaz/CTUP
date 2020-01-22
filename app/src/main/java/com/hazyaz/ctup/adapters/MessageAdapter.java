@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
     private String timing;
     private String secUser;
@@ -40,7 +40,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message_single_layout ,parent, false);
+                .inflate(R.layout.message_single_layout, parent, false);
 
 
         return new MessageViewHolder(v);
@@ -63,23 +63,33 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         if (c.getFrom().equals(secUser) && c.getMessage() != null) {
             Log.d("uuuuuuuuuu", c.getMessage());
 
+//            if (c.getFrom().equals("text")) {
             viewHolder.messageText.setText(c.getMessage());
             viewHolder.timeText.setText(dateString);
-
+//            } else {
+//                Picasso.get().load(c.getMessage()).into(viewHolder.imageView1);
+//            }
             viewHolder.messageText1.setText("");
             viewHolder.timeText1.setText("");
 
         } else if (c.getMessage() != null) {
             Log.d("uuuuuuuuuu", c.getMessage());
-
+//            if (c.getFrom().equals("text")) {
             viewHolder.messageText.setText("");
             viewHolder.timeText.setText("");
-
+//            } else {
+//                Picasso.get().load(c.getMessage()).into(viewHolder.imageView1);
+//            }
             viewHolder.messageText1.setText(c.getMessage());
             viewHolder.timeText1.setText(dateString);
         }
 
 
+    }
+
+    @Override
+    public int getItemCount() {
+        return mMessageList.size();
     }
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -97,22 +107,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
             messageText1 = view.findViewById(R.id.message_receiver);
             timeText1 = view.findViewById(R.id.time_receiver);
+
             messageText = view.findViewById(R.id.message_sender);
             timeText = view.findViewById(R.id.time_sender);
+
             imageView1 = view.findViewById(R.id.message_image_layout);
 
 
         }
     }
-
-    @Override
-    public int getItemCount() {
-        return mMessageList.size();
-    }
-
-
-
-
 
 
 }

@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("CTUP");
 
+
         if (mAuth.getCurrentUser() != null) {
 
 

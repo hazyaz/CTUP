@@ -7,4 +7,13 @@
         <item name="colorAccent">#000000</item>
     </style>
 
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
+
+        <!--        NoActionBar<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <item name="colorAccent">#ffffff</item>
+    </style>
+
+
 </resources>
+

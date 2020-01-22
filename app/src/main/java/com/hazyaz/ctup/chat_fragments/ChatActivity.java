@@ -84,6 +84,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private String mLastKey = "";
     private String mPrevKey = "";
+    private String mUri;
 
 
     @Override
@@ -275,7 +276,7 @@ public class ChatActivity extends AppCompatActivity {
             final String push_id = user_message_push.getKey();
 
 
-            StorageReference filepath = mImageStorage.child("message_images").child( push_id + ".jpg");
+            final StorageReference filepath = mImageStorage.child("message_images").child(push_id + ".jpg");
 
             filepath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -283,11 +284,10 @@ public class ChatActivity extends AppCompatActivity {
 
                     if(task.isSuccessful()){
 
-                        String download_url = task.getResult().getStorage().getDownloadUrl().toString();
-
+                        String downloadUrl = "sdjfsdjfsdf";
 
                         Map messageMap = new HashMap();
-                        messageMap.put("message", download_url);
+                        messageMap.put("message", downloadUrl);
                         messageMap.put("seen", false);
                         messageMap.put("type", "image");
                         messageMap.put("time", ServerValue.TIMESTAMP);

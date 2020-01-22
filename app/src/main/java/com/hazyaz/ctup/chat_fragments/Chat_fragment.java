@@ -112,8 +112,11 @@ public class Chat_fragment extends Fragment {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                       String data = dataSnapshot.child("message").getValue().toString();
-                        convViewHolder.setMessage(data, conv.isSeen());
+                        if (dataSnapshot.child("messages").exists()) {
+                            String data = dataSnapshot.child("message").getValue().toString();
+                            convViewHolder.setMessage(data, conv.isSeen());
+                        }
+
 
                     }
 
