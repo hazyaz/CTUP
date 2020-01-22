@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.hazyaz.ctup.PrivateChat.PrivateChat;
 import com.hazyaz.ctup.R;
 import com.hazyaz.ctup.menu_item.UserProfileAcitivity;
 import com.hazyaz.ctup.utils.Friends;
@@ -113,7 +114,7 @@ public class Friends_fragment extends Fragment {
                                     @Override
                                     public void onClick(View view) {
 
-                                        CharSequence options[] = new CharSequence[]{"Open Profile", "Send message"};
+                                        CharSequence options[] = new CharSequence[]{"Open Profile", "Send message", "Private Chat"};
 
                                         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -124,23 +125,24 @@ public class Friends_fragment extends Fragment {
 
                                                 //Click Event for each item.
                                                 if (i == 0) {
-
                                                     Intent profileIntent = new Intent(getContext(), UserProfileAcitivity.class);
                                                     profileIntent.putExtra("user_id", list_user_id);
                                                     startActivity(profileIntent);
-
-
                                                 }
-
                                                 if (i == 1) {
-
                                                     Intent chatIntent = new Intent(getContext(), ChatActivity.class);
                                                     chatIntent.putExtra("user_id", list_user_id);
                                                     chatIntent.putExtra("user_name", userName);
                                                     startActivity(chatIntent);
-
-
                                                 }
+                                                if (i == 2) {
+
+                                                    Intent chatIntent = new Intent(getContext(), PrivateChat.class);
+                                                    chatIntent.putExtra("user_id", list_user_id);
+                                                    chatIntent.putExtra("user_name", userName);
+                                                    startActivity(chatIntent);
+                                                }
+
 
                                             }
                                         });

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,9 +26,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserProfileAcitivity extends AppCompatActivity {
 
-    private ImageView mUserImage;
+    private CircleImageView mUserImage;
     private TextView mUserName;
     private TextView mUserStatus;
     private Button mProfileSendReqBtn;

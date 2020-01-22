@@ -72,7 +72,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 viewHolder.messageText.setText(c.getMessage());
             viewHolder.timeText.setText(dateString);
             } else {
-                viewHolder.messageText.setVisibility(View.GONE);
+//                viewHolder.messageText.setVisibility(View.GONE);
 //                viewHolder.timeText.setVisibility(View.GONE);
                 Picasso.get().load(c.getMessage()).into(viewHolder.imageView1);
             }
@@ -89,8 +89,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 viewHolder.timeText.setText("");
 
             } else {
-                viewHolder.messageText1.setVisibility(View.GONE);
-                viewHolder.timeText1.setVisibility(View.GONE);
+//                viewHolder.messageText1.setVisibility(View.GONE);
+//                viewHolder.timeText1.setVisibility(View.GONE);
                 Picasso.get().load(c.getMessage()).into(viewHolder.imageView2);
             }
             viewHolder.messageText1.setText(c.getMessage());

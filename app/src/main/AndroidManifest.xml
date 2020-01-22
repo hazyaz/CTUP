@@ -10,13 +10,12 @@
     <application
         android:name=".cache.ctup"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:hardwareAccelerated="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,25 +24,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.StartingActivity" />
-        <activity android:name=".login.RegisterActivity"
+        <activity
+            android:name=".login.RegisterActivity"
             android:parentActivityName=".login.StartingActivity" />
-
-
-        <activity android:name=".login.ExistingUserLogin"
-            android:parentActivityName=".login.StartingActivity"
-            />
-
+        <activity
+            android:name=".login.ExistingUserLogin"
+            android:parentActivityName=".login.StartingActivity" />
         <activity android:name=".menu_item.Setting_activity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-
-
         <activity android:name=".menu_item.AllUsersActivity" />
         <activity android:name=".menu_item.UserProfileAcitivity" />
-
-
-
 
         <service android:name=".FirebaseMessagingService">
             <intent-filter>
@@ -51,7 +43,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".chat_fragments.ChatActivity"></activity>
+        <activity android:name=".chat_fragments.ChatActivity" />
+        <activity android:name=".PrivateChat.PrivateChat"></activity>
     </application>
 
 </manifest>
