@@ -2,8 +2,8 @@
 package com.hazyaz.ctup.menu_item;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -31,7 +31,7 @@ public class AllUsersActivity extends AppCompatActivity {
 
         mdatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
 
-        mUsersList = (RecyclerView) findViewById(R.id.recyclerViewAllUsers);
+        mUsersList = findViewById(R.id.recyclerViewAllUsers);
         mUsersList.hasFixedSize();
         mUsersList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -81,18 +81,18 @@ public class AllUsersActivity extends AppCompatActivity {
         }
 
         public void setName(String name12) {
-            TextView mUserName = (TextView) mView.findViewById(R.id.user_name);
+            TextView mUserName = mView.findViewById(R.id.user_name);
             mUserName.setText(name12);
         }
 
         public void setImage(String image) {
             CircleImageView mImageView = mView.findViewById(R.id.cirlce_user_all);
-            Picasso.get().load(image).into(mImageView);
+            Picasso.get().load(image).placeholder(R.drawable.human).into(mImageView);
 
         }
 
         public void setUserStatus(String status12) {
-            TextView mStatus =  (TextView)mView.findViewById(R.id.user_status);
+            TextView mStatus = mView.findViewById(R.id.user_status);
             mStatus.setText(status12);
         }
 

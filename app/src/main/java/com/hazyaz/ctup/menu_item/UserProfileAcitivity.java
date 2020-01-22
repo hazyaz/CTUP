@@ -79,7 +79,7 @@ public class UserProfileAcitivity extends AppCompatActivity {
 
                 mUserName.setText(name);
                 // mUserStatus.setText(status);
-                Picasso.get().load(image).into(mUserImage);
+                Picasso.get().load(image).placeholder(R.drawable.human).into(mUserImage);
 
                 //------------------------------------------------ACCEPT FRIEND REQUEST ------------------------------------------------------//
 

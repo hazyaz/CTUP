@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +80,7 @@ public class Chat_fragment extends Fragment {
 
         mConvList.setHasFixedSize(true);
         mConvList.setLayoutManager(linearLayoutManager);
+        mConvList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
 
         // Inflate the layout for this fragment
@@ -112,10 +115,8 @@ public class Chat_fragment extends Fragment {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                        if (dataSnapshot.child("messages").exists()) {
                             String data = dataSnapshot.child("message").getValue().toString();
                             convViewHolder.setMessage(data, conv.isSeen());
-                        }
 
 
                     }
@@ -149,12 +150,12 @@ public class Chat_fragment extends Fragment {
                         final String userName = dataSnapshot.child("name").getValue().toString();
                         String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
 //
-//                        if(dataSnapshot.hasChild("online")) {
-//
-//                            String userOnline = dataSnapshot.child("online").getValue().toString();
-//                            convViewHolder.setUserOnline(userOnline);
-//
-//                        }
+                        if (dataSnapshot.hasChild("online")) {
+
+                            String userOnline = dataSnapshot.child("online").getValue().toString();
+                            convViewHolder.setUserOnline(userOnline);
+
+                        }
 
                         convViewHolder.setName(userName);
                         convViewHolder.setUserImage(userThumb, getContext());
@@ -183,6 +184,7 @@ public class Chat_fragment extends Fragment {
 
             }
         };
+
 
         mConvList.setAdapter(firebaseConvAdapter);
 
@@ -223,25 +225,25 @@ public class Chat_fragment extends Fragment {
         public void setUserImage(String thumb_image, Context ctx){
 
             CircleImageView userImageView = mView.findViewById(R.id.cirlce_user_all);
-            Picasso.get().load(thumb_image).into(userImageView);
+            Picasso.get().load(thumb_image).placeholder(R.drawable.human).into(userImageView);
 
         }
 
-//        public void setUserOnline(String online_status) {
-//
-//            ImageView userOnlineView = (ImageView) mView.findViewById(R.id.OnlineDot);
-//
-//            if(online_status.equals("true")){
-//
-//                userOnlineView.setVisibility(View.VISIBLE);
-//
-//            } else {
-//
-//                userOnlineView.setVisibility(View.INVISIBLE);
-//
-//            }
-//
-//        }
+        public void setUserOnline(String online_status) {
+
+            ImageView userOnlineView = mView.findViewById(R.id.OnlineDot);
+
+            if (online_status.equals("true")) {
+
+                userOnlineView.setVisibility(View.VISIBLE);
+
+            } else {
+
+                userOnlineView.setVisibility(View.INVISIBLE);
+
+            }
+
+        }
 
 
     }

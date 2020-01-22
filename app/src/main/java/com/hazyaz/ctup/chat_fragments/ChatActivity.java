@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -35,7 +36,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hazyaz.ctup.R;
 import com.hazyaz.ctup.adapters.MessageAdapter;
+import com.hazyaz.ctup.utils.GetTimeAgo;
 import com.hazyaz.ctup.utils.Message;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,34 +50,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatActivity extends AppCompatActivity {
 
 
-
+    private static final int TOTAL_ITEMS_TO_LOAD = 10;
+    private static final int GALLERY_PICK = 1;
+    private final List<Message> messagesList = new ArrayList<>();
     private String mChatUser;
     private Toolbar mChatToolbar;
-
     private DatabaseReference mRootRef;
-
     private TextView mTitleView;
     private TextView mLastSeenView;
     private CircleImageView mProfileImage;
     private FirebaseAuth mAuth;
     private String mCurrentUserId;
-
     private ImageButton mChatAddBtn;
     private ImageButton mChatSendBtn;
     private EditText mChatMessageView;
-
     private RecyclerView mMessagesList;
     private SwipeRefreshLayout mRefreshLayout;
-
-    private final List<Message> messagesList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
     private MessageAdapter mAdapter;
-
-    private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
-
-    private static final int GALLERY_PICK = 1;
-
     // Storage Firebase
     private StorageReference mImageStorage;
 
@@ -112,6 +106,7 @@ public class ChatActivity extends AppCompatActivity {
         View action_bar_view = inflater.inflate(R.layout.custom_chat, null);
 
         actionBar.setCustomView(action_bar_view);
+
 
         // ---- Custom Action bar Items ----
 
@@ -157,17 +152,21 @@ public class ChatActivity extends AppCompatActivity {
 
                 } else {
 
-                    //    GetTimeAgo getTimeAgo = new GetTimeAgo();
+                    GetTimeAgo getTimeAgo = new GetTimeAgo();
 
-                    //   long lastTime = Long.parseLong(online);
+                    long lastTime = Long.parseLong(online);
 
-                    //   String lastSeenTime = getTimeAgo.getTimeAgo(lastTime, getApplicationContext());
+                    String lastSeenTime = GetTimeAgo.getTimeAgo(lastTime, getApplicationContext());
 
-                    //   mLastSeenView.setText(lastSeenTime);
+                    mLastSeenView.setText("Last Seen " + lastSeenTime);
 
                 }
 
+                Picasso.get().load(image).placeholder(R.drawable.human).into(mProfileImage);
+
+
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -263,7 +262,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == GALLERY_PICK && resultCode == RESULT_OK){
+        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
 
             Uri imageUri = data.getData();
 
@@ -282,44 +281,54 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
 
-                        String downloadUrl = "sdjfsdjfsdf";
+                        String downloadUrl = task.getResult().getMetadata().getReference().getDownloadUrl().toString();
 
-                        Map messageMap = new HashMap();
-                        messageMap.put("message", downloadUrl);
-                        messageMap.put("seen", false);
-                        messageMap.put("type", "image");
-                        messageMap.put("time", ServerValue.TIMESTAMP);
-                        messageMap.put("from", mCurrentUserId);
-
-                        Map messageUserMap = new HashMap();
-                        messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
-                        messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
-
-                        mChatMessageView.setText("");
-
-                        mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+                        filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
-                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            public void onSuccess(Uri uri) {
 
-                                if(databaseError != null){
+                                String downloadUrl = uri.toString();
+                                Map messageMap = new HashMap();
+                                messageMap.put("message", downloadUrl);
+                                messageMap.put("seen", false);
+                                messageMap.put("type", "image");
+                                messageMap.put("time", ServerValue.TIMESTAMP);
+                                messageMap.put("from", mCurrentUserId);
 
-                                    Log.d("CHAT_LOG", databaseError.getMessage());
+                                Map messageUserMap = new HashMap();
+                                messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
+                                messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
 
-                                }
+                                mChatMessageView.setText("");
+
+                                mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                                        if (databaseError != null) {
+
+                                            Log.d("CHAT_LOG", databaseError.getMessage());
+
+                                        }
+
+                                    }
+                                });
+
 
                             }
-                        });
 
+
+                        });
 
                     }
 
+
                 }
+
             });
-
         }
-
     }
 
     private void loadMoreMessages() {

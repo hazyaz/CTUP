@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -63,6 +64,7 @@ public class Friends_fragment extends Fragment {
 
         mFriendsList.setHasFixedSize(true);
         mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mFriendsList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         // Inflate the layout for this fragment
         return mMainView;
@@ -194,7 +196,7 @@ public class Friends_fragment extends Fragment {
         public void setUserImage(String thumb_image, Context ctx) {
 
             CircleImageView userImageView = mView.findViewById(R.id.cirlce_user_all);
-            Picasso.get().load(thumb_image).into(userImageView);
+            Picasso.get().load(thumb_image).placeholder(R.drawable.human).into(userImageView);
 
         }
 

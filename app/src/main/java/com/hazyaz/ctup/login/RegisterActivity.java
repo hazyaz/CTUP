@@ -53,7 +53,7 @@ private TextInputLayout m1Password;
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-mRegProgress = new ProgressDialog(this);
+        mRegProgress = new ProgressDialog(this);
 
 
         mAuth = FirebaseAuth.getInstance();
