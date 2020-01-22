@@ -41,6 +41,7 @@ public class UserProfileAcitivity extends AppCompatActivity {
     private String mCurrent_state;
     private DatabaseReference mNotificationDatabase;
     private FirebaseUser mCurrent_user;
+    private DatabaseReference xMessagedatabse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +55,9 @@ public class UserProfileAcitivity extends AppCompatActivity {
         mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
         mNotificationDatabase = FirebaseDatabase.getInstance().getReference().child("notifications");
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("friendsReq");
-        mCurrent_user = FirebaseAuth.getInstance().getCurrentUser();
 
+        mCurrent_user = FirebaseAuth.getInstance().getCurrentUser();
+        xMessagedatabse = FirebaseDatabase.getInstance().getReference().child("messages");
 
         mUserImage = findViewById(R.id.UserImage);
         mUserName = findViewById(R.id.UserName);
@@ -276,6 +278,7 @@ public class UserProfileAcitivity extends AppCompatActivity {
                                                     mProfileSendReqBtn.setText("Un Friend");
                                                     mDeclineBtn.setEnabled(false);
                                                     mDeclineBtn.setVisibility(View.INVISIBLE);
+                                                    xMessagedatabse.child(mCurrent_user.toString()).child(user_id).removeValue();
 
                                                 }
                                             });

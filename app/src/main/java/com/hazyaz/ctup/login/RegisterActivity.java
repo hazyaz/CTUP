@@ -6,17 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
-
-
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-
-
 import android.widget.Toast;
-
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,9 +45,10 @@ private TextInputLayout m1Password;
         setContentView(R.layout.activity_register);
 
 
-      mToolbar = (Toolbar)findViewById(R.id.app_bar_register);
+        mToolbar = findViewById(R.id.app_bar_register);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Create an Account");
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -62,12 +58,12 @@ mRegProgress = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
 
-         m1DisplayName = (TextInputLayout) findViewById(R.id.regName);
-        m1Email = (TextInputLayout) findViewById(R.id.regEmail);
-       m1Password = (TextInputLayout) findViewById(R.id.regPassword);
+        m1DisplayName = findViewById(R.id.regName);
+        m1Email = findViewById(R.id.regEmail);
+        m1Password = findViewById(R.id.regPassword);
 
 
-       Button mRegisterButton = (Button) findViewById(R.id.RegisterLoginInfoButton);
+        Button mRegisterButton = findViewById(R.id.RegisterLoginInfoButton);
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

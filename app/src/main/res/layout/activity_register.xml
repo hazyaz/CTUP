@@ -1,83 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context=".login.RegisterActivity">
 
-<include layout="@layout/app_bar_layout" android:id="@+id/app_bar_register"/>
+    <include
+        android:id="@+id/app_bar_register"
+        layout="@layout/app_bar_layout" />
 
+    <RelativeLayout
 
-
-    <TextView
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PLEASE ENTER YOUR DETAILS"
-        android:textSize="25sp"
-        android:layout_below="@+id/app_bar_register"
-        android:layout_marginTop="30dp"
-        android:textColor="#000000"/>
-
-
-<android.support.design.widget.TextInputLayout
-    android:paddingTop="200dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/regName">
-
-    <EditText
-        android:inputType="textPersonName"
-        android:hint="Enter you name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="128dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="164dp"
+
+        android:background="@drawable/color_shape"
+        android:elevation="10dp">
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/regName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="36dp"
+            android:textColorHint="#ffffff">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:inputType="textPersonName" />
 </android.support.design.widget.TextInputLayout>
 
-<android.support.design.widget.TextInputLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/regEmail"
-    android:layout_below="@id/regName">
-    <EditText
-        android:inputType="textEmailAddress"
-        android:hint="Enter you Email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/regEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/regName"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="14dp"
+            android:textColorHint="#ffffff">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
 </android.support.design.widget.TextInputLayout>
 
-<android.support.design.widget.TextInputLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/regPassword"
-    android:layout_below="@id/regEmail">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/regPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/regEmail"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="14dp"
+            android:textColorHint="#ffffff">
 
-    <EditText
-        android:inputType="textPassword"
-        android:hint="Enter your password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword" />
 
-</android.support.design.widget.TextInputLayout>
-
-
-
-<Button
-    android:layout_marginTop="30dp"
-    android:id="@+id/RegisterLoginInfoButton"
-    android:layout_below="@+id/regPassword"
-    android:layout_width="150dp"
-    android:layout_centerInParent="true"
-    android:layout_height="wrap_content"
-    android:text="SIGN UP"
-    />
+        </android.support.design.widget.TextInputLayout>
 
 
+        <Button
+            android:id="@+id/RegisterLoginInfoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="36dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/white_gradient"
+            android:backgroundTint="#ffffff"
+            android:text="SIGN UP" />
 
 
-
-
-
+    </RelativeLayout>
 
 
 
