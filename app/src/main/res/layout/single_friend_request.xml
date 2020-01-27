@@ -6,18 +6,20 @@
 
     <ImageView
         android:id="@+id/userImageRequst"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/requestUserName"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="16dp"
         android:layout_toRightOf="@+id/userImageRequst"
         android:text="Sara Khan"
         android:textColor="#000000"
-        android:textSize="20sp" />
+        android:textSize="24sp" />
 
 
     <TextView
@@ -25,25 +27,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/requestUserName"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/userImageRequst"
         android:text="Can we be Friends" />
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/userImageRequst">
     <Button
         android:id="@+id/AcceptRequest"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userImageRequst"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="4dp"
+        android:layout_weight="1"
         android:text="accept" />
 
 
     <Button
         android:id="@+id/RejectRequest"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/userImageRequst"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1"
         android:text="decline" />
 
-
+    </LinearLayout>
 </RelativeLayout>

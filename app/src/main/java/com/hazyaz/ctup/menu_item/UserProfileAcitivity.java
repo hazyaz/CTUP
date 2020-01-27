@@ -1,5 +1,6 @@
 package com.hazyaz.ctup.menu_item;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -112,6 +113,8 @@ public class UserProfileAcitivity extends AppCompatActivity {
 
                                 mDeclineBtn.setVisibility(View.VISIBLE);
                                 mDeclineBtn.setEnabled(true);
+                                mDeclineBtn.setBackgroundColor(Color.GREEN);
+
 
 
                             } else if (req_type.equals("sent")) {
@@ -121,6 +124,8 @@ public class UserProfileAcitivity extends AppCompatActivity {
 
                                 mDeclineBtn.setVisibility(View.INVISIBLE);
                                 mDeclineBtn.setEnabled(false);
+                                mDeclineBtn.setBackgroundColor(Color.RED);
+
 
                             }
 
@@ -139,6 +144,7 @@ public class UserProfileAcitivity extends AppCompatActivity {
 
                                         mDeclineBtn.setVisibility(View.INVISIBLE);
                                         mDeclineBtn.setEnabled(false);
+                                        mDeclineBtn.setBackgroundColor(Color.RED);
 
                                     }
 
@@ -207,6 +213,7 @@ public class UserProfileAcitivity extends AppCompatActivity {
                                                 mCurrent_state = "req_sent";
                                                 mDeclineBtn.setEnabled(false);
                                                 mDeclineBtn.setVisibility(View.INVISIBLE);
+                                                mDeclineBtn.setBackgroundColor(Color.RED);
                                             }
                                         });
 
@@ -241,6 +248,7 @@ public class UserProfileAcitivity extends AppCompatActivity {
 
                                     mDeclineBtn.setVisibility(View.INVISIBLE);
                                     mDeclineBtn.setEnabled(false);
+                                    mDeclineBtn.setBackgroundColor(Color.GREEN);
 
 
                                 }
@@ -279,6 +287,7 @@ public class UserProfileAcitivity extends AppCompatActivity {
                                                     mProfileSendReqBtn.setText("Un Friend");
                                                     mDeclineBtn.setEnabled(false);
                                                     mDeclineBtn.setVisibility(View.INVISIBLE);
+                                                    mDeclineBtn.setBackgroundColor(Color.RED);
                                                     xMessagedatabse.child(mCurrent_user.toString()).child(user_id).removeValue();
 
                                                 }
@@ -316,6 +325,7 @@ public class UserProfileAcitivity extends AppCompatActivity {
 
                                 mDeclineBtn.setVisibility(View.INVISIBLE);
                                 mDeclineBtn.setEnabled(false);
+                                mDeclineBtn.setBackgroundColor(Color.GREEN);
 
                             } else {
 
