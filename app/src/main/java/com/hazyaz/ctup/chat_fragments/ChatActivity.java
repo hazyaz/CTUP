@@ -118,7 +118,7 @@ public class ChatActivity extends AppCompatActivity {
         mChatSendBtn = findViewById(R.id.chat_send_btn);
         mChatMessageView = findViewById(R.id.chat_message_view);
 
-        mAdapter = new MessageAdapter(messagesList, mChatUser);
+        mAdapter = new MessageAdapter(messagesList, mChatUser, mCurrentUserId);
 
         mMessagesList = findViewById(R.id.messages_list);
         mRefreshLayout = findViewById(R.id.message_swipe_layout);

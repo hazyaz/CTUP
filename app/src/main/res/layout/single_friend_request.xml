@@ -14,8 +14,9 @@
     <TextView
         android:id="@+id/requestUserName"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:layout_toRightOf="@+id/userImageRequst"
         android:text="Sara Khan"
         android:textColor="#000000"
@@ -35,15 +36,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userImageRequst">
-    <Button
+        android:layout_below="@+id/userImageRequst"
+        android:layout_marginTop="16dp">
+
+        <Button
         android:id="@+id/AcceptRequest"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="4dp"
         android:layout_weight="1"
-        android:text="accept" />
+            android:background="@drawable/color_shape"
+            android:text="accept"
+            android:textColor="#ffffff" />
 
 
     <Button
@@ -53,7 +58,9 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="8dp"
         android:layout_weight="1"
-        android:text="decline" />
+        android:background="@drawable/color_shape"
+        android:text="decline"
+        android:textColor="#ffffff" />
 
     </LinearLayout>
 </RelativeLayout>

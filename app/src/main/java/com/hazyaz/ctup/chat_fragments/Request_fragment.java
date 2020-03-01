@@ -1,7 +1,6 @@
 package com.hazyaz.ctup.chat_fragments;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -137,7 +136,7 @@ public class Request_fragment extends Fragment {
                                             friendsViewHolder.userNameView.setText(userName);
                                             Picasso.get().load(userThumb).into(friendsViewHolder.userImageView);
 
-                                            friendsViewHolder.mRejectRequest.setBackgroundColor(Color.RED);
+//                                            friendsViewHolder.mRejectRequest.setBackgroundColor(Color.RED);
                                             friendsViewHolder.mRejectRequest.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -151,7 +150,7 @@ public class Request_fragment extends Fragment {
                                                 }
                                             });
 
-                                            friendsViewHolder.mAcceptRequest.setBackgroundColor(Color.GREEN);
+//                                            friendsViewHolder.mAcceptRequest.setBackgroundColor(Color.GREEN);
                                             friendsViewHolder.mAcceptRequest.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -187,7 +186,7 @@ public class Request_fragment extends Fragment {
 
                                             friendsViewHolder.mAcceptRequest.setVisibility(View.VISIBLE);
                                             friendsViewHolder.mAcceptRequest.setText("Cancel friend Request");
-                                            friendsViewHolder.mAcceptRequest.setBackgroundColor(Color.RED);
+//                                            friendsViewHolder.mAcceptRequest.setBackgroundColor(Color.RED);
                                             friendsViewHolder.mAcceptRequest.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {

@@ -30,10 +30,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private String mCurrentUserId;
 
 
-    public MessageAdapter(List<Message> mMessageList, String secondUser) {
+    public MessageAdapter(List<Message> mMessageList, String secondUser, String mCurrentUser) {
 
         this.secUser = secondUser;
         this.mMessageList = mMessageList;
+        this.mCurrentUserId = mCurrentUser;
 
     }
 
@@ -55,46 +56,54 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
 
         mAuth = FirebaseAuth.getInstance();
-        String currentUserId = mAuth.getCurrentUser().getUid();
+
 
         Message c = mMessageList.get(i);
         String from_user = c.getFrom();
+        String type = c.getType();
+
         String dateString = formatter.format(new Date(c.getTime()));
-
+        Log.d("1244544", from_user);
         if (c.getFrom().equals(secUser) && c.getMessage() != null) {
-            Log.d("uuuuuuuuuu", c.getMessage());
 
+            Log.d("uuuu", c.getMessage());
 
-            viewHolder.messageText.setVisibility(View.VISIBLE);
-            viewHolder.timeText.setVisibility(View.VISIBLE);
-
-            if (c.getFrom().equals("text")) {
+            if (c.getType().equals("text")) {
                 viewHolder.messageText.setText(c.getMessage());
             viewHolder.timeText.setText(dateString);
-            } else {
-//                viewHolder.messageText.setVisibility(View.GONE);
-//                viewHolder.timeText.setVisibility(View.GONE);
+
+//            } else if(c.getType().equals("image")) {
+
                 Picasso.get().load(c.getMessage()).into(viewHolder.imageView1);
+
+//                viewHolder.messageText.setVisibility(View.INVISIBLE);
+//                viewHolder.timeText.setVisibility(View.INVISIBLE);
+
             }
+
             viewHolder.messageText1.setText("");
             viewHolder.timeText1.setText("");
 
-        } else if (c.getMessage() != null) {
-            viewHolder.messageText1.setVisibility(View.VISIBLE);
-            viewHolder.timeText1.setVisibility(View.VISIBLE);
-            Log.d("uuuuuuuuuu", c.getMessage());
+        } else if (c.getFrom().equals(mCurrentUserId) && c.getMessage() != null) {
 
-            if (c.getFrom().equals("text")) {
-                viewHolder.messageText.setText("");
-                viewHolder.timeText.setText("");
+            Log.d("uuuuuuuuuu", c.getFrom());
+            Log.d("uuu", c.getMessage());
 
-            } else {
-//                viewHolder.messageText1.setVisibility(View.GONE);
-//                viewHolder.timeText1.setVisibility(View.GONE);
+            if (c.getType().equals("text")) {
+
+                viewHolder.messageText1.setText(c.getMessage());
+                viewHolder.timeText1.setText(dateString);
+
+//            } else if(c.getType().equals("image")){
+
                 Picasso.get().load(c.getMessage()).into(viewHolder.imageView2);
+
+//                viewHolder.messageText1.setVisibility(View.INVISIBLE);
+//                viewHolder.timeText1.setVisibility(View.INVISIBLE);
+
             }
-            viewHolder.messageText1.setText(c.getMessage());
-            viewHolder.timeText1.setText(dateString);
+            viewHolder.messageText.setText("");
+            viewHolder.timeText.setText("");
         }
 
 
